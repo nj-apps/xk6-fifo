@@ -1,4 +1,4 @@
-module fifo
+module github.com/nj-apps/xk6-fifo
 
 go 1.20
 
