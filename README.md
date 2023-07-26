@@ -107,3 +107,10 @@ generator ✓ [======================================] 2 VUs  00m00.0s/10m0s  2/
 results   ✓ [======================================] 1 VUs  0.0s/2s         7/7 iters, 7 per VU
 
 ```
+
+You can name the FIFOs if you need to use more than one in a script :
+
+```javascript
+const client1 = new fifo.Client("FIRST_FIFO");
+const client2 = new fifo.Client("ANOTHER_FIFO");
+```

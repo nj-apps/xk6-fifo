@@ -31,11 +31,14 @@ type Client struct {
 	queue *goconcurrentqueue.FIFO
 }
 
-var check = false
-var client *Client
+//var check = false
+//var client *Client
+
+var clients map[string]*Client
 
 func init() {
 	modules.Register("k6/x/fifo", new(FIFO))
+	clients = make(map[string]*Client)
 }
 
 // New returns a pointer to a new KV instance
@@ -58,15 +61,31 @@ func (mi *ModuleInstance) Exports() modules.Exports {
 }
 
 // NewClient is the JS constructor for the Client
+func newClient(args []goja.Value, vu modules.VU) *Client {
+	var name string
+	// Call without named FIFO
+	if len(args) == 0 {
+		name = "default"
+	} else {
+		name = args[0].ToString().String()
+	}
+
+	if _, exists := clients[name]; !exists {
+		var q *goconcurrentqueue.FIFO
+		q = goconcurrentqueue.NewFIFO()
+		client := &Client{vu: vu, queue: q}
+		clients[name] = client
+		return client
+	}
+
+	return clients[name]
+}
+
+// NewClient is the JS constructor for the Client
 func (mi *ModuleInstance) NewClient(call goja.ConstructorCall) *goja.Object {
 	rt := mi.vu.Runtime()
 
-	if check != true {
-		var q *goconcurrentqueue.FIFO
-		q = goconcurrentqueue.NewFIFO()
-		client = &Client{vu: mi.vu, queue: q}
-		check = true
-	}
+	client := newClient(call.Arguments, mi.vu)
 
 	return rt.ToValue(client).ToObject(rt)
 }
