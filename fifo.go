@@ -1,7 +1,7 @@
 package fifo
 
 import (
-	"github.com/dop251/goja"
+	"github.com/grafana/sobek"
 	"github.com/enriquebris/goconcurrentqueue"
 	"go.k6.io/k6/js/modules"
 )
@@ -61,7 +61,7 @@ func (mi *ModuleInstance) Exports() modules.Exports {
 }
 
 // NewClient is the JS constructor for the Client
-func newClient(args []goja.Value, vu modules.VU) *Client {
+func newClient(args []sobek.Value, vu modules.VU) *Client {
 	var name string
 	// Call without named FIFO
 	if len(args) == 0 {
@@ -82,7 +82,7 @@ func newClient(args []goja.Value, vu modules.VU) *Client {
 }
 
 // NewClient is the JS constructor for the Client
-func (mi *ModuleInstance) NewClient(call goja.ConstructorCall) *goja.Object {
+func (mi *ModuleInstance) NewClient(call sobek.ConstructorCall) *sobek.Object {
 	rt := mi.vu.Runtime()
 
 	client := newClient(call.Arguments, mi.vu)

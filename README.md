@@ -21,7 +21,7 @@ Then:
 
 2. Build the binary:
   ```shell
-  $ xk6 build --with gitlab.tech.orange/iva-integration-performance/tools/injection-as-a-service/k6-extensions/xk6-fifo@latest
+  $ xk6 build --with github.com/nj-apps/xk6-fifo@latest
   ```
 
 ## Example

@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/dop251/goja"
+	"github.com/grafana/sobek"
 	"go.k6.io/k6/js/common"
 	"go.k6.io/k6/lib"
 )
@@ -23,15 +23,15 @@ func (mockVU) InitEnv() *common.InitEnvironment {
 func (mockVU) State() *lib.State {
 	return nil
 }
-func (mockVU) Runtime() *goja.Runtime {
-	return &goja.Runtime{}
+func (mockVU) Runtime() *sobek.Runtime {
+	return &sobek.Runtime{}
 }
 func (mockVU) RegisterCallback() (enqueueCallback func(func() error)) {
 	return enqueueCallback
 }
 
 func TestFIFO(t *testing.T) {
-	Arguments := []goja.Value{}
+	Arguments := []sobek.Value{}
 
 	client1 := newClient(Arguments, mockVU{})
 	client1.Push("first value")
@@ -45,16 +45,16 @@ func TestFIFO(t *testing.T) {
 }
 
 func TestNamedFIFO(t *testing.T) {
-	vm := goja.New()
+	vm := sobek.New()
 
-	Arguments := []goja.Value{
+	Arguments := []sobek.Value{
 		vm.ToValue("liste A"),
 	}
 	client1 := newClient(Arguments, mockVU{})
 	client1.Push("first value A")
 	client1.Push("2nd value A")
 
-	Arguments = []goja.Value{
+	Arguments = []sobek.Value{
 		vm.ToValue("liste B"),
 	}
 	client2 := newClient(Arguments, mockVU{})
